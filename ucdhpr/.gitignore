@@ -1,4 +1,6 @@
+<<<<<<< HEAD
 /target/
+=======
 # Binaries
 *.7z
 *.dmg
@@ -20,3 +22,4 @@ target/
 .settings/
 .classpath
 .project
+>>>>>>> branch 'master' of https://github.com/Service-Technology-Unit/ucdhpr.git
