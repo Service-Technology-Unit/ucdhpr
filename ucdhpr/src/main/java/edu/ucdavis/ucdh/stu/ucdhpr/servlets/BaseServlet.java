@@ -16,7 +16,6 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import edu.ucdavis.ucdh.stu.snutil.beans.Event;
 import edu.ucdavis.ucdh.stu.snutil.util.EventService;
 
-
 /**
  * <p>This is the base class for all servlets.</p>
  */

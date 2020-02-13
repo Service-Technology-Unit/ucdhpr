@@ -3,8 +3,6 @@ package edu.ucdavis.ucdh.stu.ucdhpr.batch;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -18,10 +16,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -31,11 +25,8 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
@@ -142,14 +133,14 @@ public class NewTransactionPost implements SpringBatchJob {
 		}
 
 		// establish HTTP Client
-		client = createHttpClient();
+		client = HttpClients.custom().setSSLHostnameVerifier(new NoopHostnameVerifier()).build();
 
 		log.info(" ");
 		log.info("Run time properties validated.");
 		log.info(" ");
 
 		// connect to database
-		Class.forName(dbDriver).newInstance();
+		Class.forName(dbDriver);
 		conn = DriverManager.getConnection(dbURL, dbUser, dbPassword);
 		stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
 		rs = stmt.executeQuery(SQL);
@@ -254,33 +245,6 @@ public class NewTransactionPost implements SpringBatchJob {
 		} catch (Exception e) {
 			log.error("Exception encountered accessing URL " + up2dateService + "/publish", e);
 		}
-	}
-
-	private HttpClient createHttpClient() {
-		HttpClient httpClient = new DefaultHttpClient();
-
-		try {
-			SSLContext ctx = SSLContext.getInstance("TLS");
-			X509TrustManager tm = new X509TrustManager() {
-				public void checkClientTrusted(X509Certificate[] xcs, String string) throws CertificateException {
-				}
-				public void checkServerTrusted(X509Certificate[] xcs, String string) throws CertificateException {
-				}
-				public X509Certificate[] getAcceptedIssuers() {
-					return null;
-				}
-			};
-			ctx.init(null, new TrustManager[]{tm}, null);
-			SSLSocketFactory ssf = new SSLSocketFactory(ctx, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-			ClientConnectionManager ccm = httpClient.getConnectionManager();
-			SchemeRegistry sr = ccm.getSchemeRegistry();
-			sr.register(new Scheme("https", 443, ssf));
-			httpClient = new DefaultHttpClient(ccm, httpClient.getParams());
-		} catch (Exception e) {
-			log.error("Exception encountered: " + e.getClass().getName() + "; " + e.getMessage(), e);
-		}
-
-		return httpClient;
 	}
 
 	/**
