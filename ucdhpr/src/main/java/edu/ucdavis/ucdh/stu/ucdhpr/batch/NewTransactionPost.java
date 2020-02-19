@@ -25,14 +25,13 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import edu.ucdavis.ucdh.stu.core.batch.SpringBatchJob;
 import edu.ucdavis.ucdh.stu.core.utils.BatchJobService;
 import edu.ucdavis.ucdh.stu.core.utils.BatchJobServiceStatistic;
+import edu.ucdavis.ucdh.stu.core.utils.HttpClientProvider;
 
 public class NewTransactionPost implements SpringBatchJob {
 	private static final String SQL = "SELECT TRANSACTION_ID, ACTION, MERGED_INTO, ID, LAST_NAME, FIRST_NAME, MIDDLE_NAME, TITLE, SUPERVISOR, MANAGER, DEPT_ID, IS_ACTIVE, IS_UCDH_EMPLOYEE AS IS_EMPLOYEE, IS_UCDH_EMPLOYEE, IS_UCD_EMPLOYEE, IS_EXTERNAL, IS_PREVIOUS_UCDH_EMPLOYEE AS IS_PREVIOUS_HS_EMPLOYEE, IS_PREVIOUS_UCDH_EMPLOYEE, IS_PREVIOUS_UCD_EMPLOYEE, IS_STUDENT, START_DATE, END_DATE, PHONE_NUMBER, CELL_NUMBER, PAGER_NUMBER, PAGER_PROVIDER, ALTERNATE_PHONES, EMAIL, ALTERNATE_EMAIL, LOCATION_CODE, BANNER_ID, BANNER_START, BANNER_END, CAMPUS_PPS_ID, CAMPUS_PPS_START, CAMPUS_PPS_END, EXTERNAL_ID, EXTERNAL_START, EXTERNAL_END, UCDH_AD_ID, UCDH_AD_START, UCDH_AD_END, KERBEROS_ID, KERBEROS_START, KERBEROS_END, MOTHRA_ID, MOTHRA_START, MOTHRA_END, PPS_ID, PPS_START, PPS_END, STUDENT_ID, STUDENT_START, STUDENT_END, STUDENT_MAJOR, STUDENT_MAJOR_NAME, UC_PATH_ID, UC_PATH_INSTITUTION, UC_PATH_TYPE, UC_PATH_PERCENT, UC_PATH_REPRESENTATION, UC_PATH_START, UC_PATH_END, PROCESSED, CREATED_ON, CREATED_BY, CREATED_FROM, UPDATE_CT, UPDATED_ON, UPDATED_BY, UPDATED_FROM FROM INCOMING WHERE PROCESSED IS NULL ORDER BY TRANSACTION_ID";
@@ -132,8 +131,12 @@ public class NewTransactionPost implements SpringBatchJob {
 			fieldMap.put(parts[0], parts[1]);
 		}
 
-		// establish HTTP Client
-		client = HttpClients.custom().setSSLHostnameVerifier(new NoopHostnameVerifier()).build();
+		// verify HTTP client
+		try {
+			client = HttpClientProvider.getClient();
+		} catch (Exception e) {
+			throw new IllegalArgumentException("Unable to create HTTP client: " + e, e);
+		}
 
 		log.info(" ");
 		log.info("Run time properties validated.");
