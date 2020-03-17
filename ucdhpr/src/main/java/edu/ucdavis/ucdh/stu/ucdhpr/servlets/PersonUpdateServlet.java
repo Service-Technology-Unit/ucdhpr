@@ -15,7 +15,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 public class PersonUpdateServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String INSERT_SQL = "INSERT INTO INCOMING (ACTION, MERGED_INTO, ID, LAST_NAME, FIRST_NAME, MIDDLE_NAME, TITLE, SUPERVISOR, MANAGER, DEPT_ID, IS_ACTIVE, IS_UCDH_EMPLOYEE, IS_UCD_EMPLOYEE, IS_EXTERNAL, IS_PREVIOUS_UCDH_EMPLOYEE, IS_PREVIOUS_UCD_EMPLOYEE, IS_STUDENT, START_DATE, END_DATE, PHONE_NUMBER, CELL_NUMBER, PAGER_NUMBER, PAGER_PROVIDER, ALTERNATE_PHONES, EMAIL, ALTERNATE_EMAIL, LOCATION_CODE, BANNER_ID, BANNER_START, BANNER_END, CAMPUS_PPS_ID, CAMPUS_PPS_START, CAMPUS_PPS_END, EXTERNAL_ID, EXTERNAL_START, EXTERNAL_END, UCDH_AD_ID, UCDH_AD_START, UCDH_AD_END, KERBEROS_ID, KERBEROS_START, KERBEROS_END, MOTHRA_ID, MOTHRA_START, MOTHRA_END, PPS_ID, PPS_START, PPS_END, STUDENT_ID, STUDENT_START, STUDENT_END, STUDENT_MAJOR, STUDENT_MAJOR_NAME, UC_PATH_ID, UC_PATH_INSTITUTION, UC_PATH_TYPE, UC_PATH_PERCENT, UC_PATH_REPRESENTATION, UC_PATH_START, UC_PATH_END, CREATED_ON, CREATED_BY, CREATED_FROM, UPDATE_CT, UPDATED_ON, UPDATED_BY, UPDATED_FROM) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, getdate(), ?, ?, 0, getdate(), ?, ?)";
+	private static final String INSERT_SQL = "INSERT INTO INCOMING (ACTION, MERGED_INTO, ID, LAST_NAME, FIRST_NAME, MIDDLE_NAME, TITLE, SUPERVISOR, MANAGER, DEPT_ID, IS_ACTIVE, IS_UCDH_EMPLOYEE, IS_UCD_EMPLOYEE, IS_EXTERNAL, IS_PREVIOUS_UCDH_EMPLOYEE, IS_PREVIOUS_UCD_EMPLOYEE, IS_STUDENT, START_DATE, END_DATE, PHONE_NUMBER, CELL_NUMBER, PAGER_NUMBER, PAGER_PROVIDER, ALTERNATE_PHONES, EMAIL, ALTERNATE_EMAIL, LOCATION_CODE, BANNER_ID, BANNER_START, BANNER_END, CAMPUS_PPS_ID, CAMPUS_PPS_START, CAMPUS_PPS_END, EXTERNAL_ID, EXTERNAL_START, EXTERNAL_END, UCDH_AD_ID, UCDH_AD_START, UCDH_AD_END, KERBEROS_ID, KERBEROS_START, KERBEROS_END, MOTHRA_ID, MOTHRA_START, MOTHRA_END, PPS_ID, PPS_START, PPS_END, STUDENT_ID, STUDENT_START, STUDENT_END, STUDENT_MAJOR, STUDENT_MAJOR_NAME, UC_PATH_ID, UC_PATH_INSTITUTION, UC_PATH_TYPE, UC_PATH_PERCENT, UC_PATH_REPRESENTATION, UC_PATH_START, UC_PATH_END, CREATED_ON, CREATED_BY, CREATED_FROM, UPDATE_CT, UPDATED_ON, UPDATED_BY, UPDATED_FROM, DEPT_NAME) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, getdate(), ?, ?, 0, getdate(), ?, ?, ?)";
 	private DataSource dataSource = null;
 
 	public void init() throws ServletException {
@@ -138,7 +138,7 @@ public class PersonUpdateServlet extends BaseServlet {
 				} 
 				ps.setString(18, nullify(req.getParameter("startDate")));
 				ps.setString(19, nullify(req.getParameter("endDate")));
-				ps.setString(20, nullify(req.getParameter("phoneNr")));
+				ps.setString(20, nullify(req.getParameter("phoneNumber")));
 				ps.setString(21, nullify(req.getParameter("cellNr")));
 				ps.setString(22, nullify(req.getParameter("pagerNr")));
 				ps.setString(23, nullify(req.getParameter("pagerProvider")));
@@ -183,7 +183,7 @@ public class PersonUpdateServlet extends BaseServlet {
 				ps.setString(50, nullify(req.getParameter("studentStart")));
 				ps.setString(51, nullify(req.getParameter("studentEnd")));
 				ps.setString(52, nullify(req.getParameter("studentMajor")));
-				ps.setString(53, nullify(req.getParameter("studentMajorName")));
+				ps.setString(53, nullify(req.getParameter("studentType")));
 				ps.setString(54, nullify(req.getParameter("ucPathId")));
 				ps.setString(55, nullify(req.getParameter("ucPathInstitution")));
 				ps.setString(56, nullify(req.getParameter("ucPathType")));
@@ -195,6 +195,7 @@ public class PersonUpdateServlet extends BaseServlet {
 				ps.setString(62, remoteAddr);
 				ps.setString(63, req.getRemoteUser());
 				ps.setString(64, remoteAddr);
+				ps.setString(65, nullify(req.getParameter("deptName")));
 				if (ps.executeUpdate() > 0) {
 					response.put("responseCode", "0");
 					response.put("response", "Transaction accepted");

@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>edu.ucdavis.ucdh.stu</groupId>
   <artifactId>ucdhpr</artifactId>
-  <version>1.1.1</version>
+  <version>1.1.3</version>
 	<name>UCDH Person Repository</name>
 	<description>UCDH Person Repository</description>
 
@@ -230,7 +230,7 @@
 		<dependency>
 			<groupId>edu.ucdavis.ucdh.stu</groupId>
 			<artifactId>snutil</artifactId>
-			<version>1.2.2</version>
+			<version>1.2.3</version>
 		</dependency>
 	</dependencies>
 
