@@ -139,7 +139,7 @@ public class PersonUpdateServlet extends BaseServlet {
 				ps.setString(18, nullify(req.getParameter("startDate")));
 				ps.setString(19, nullify(req.getParameter("endDate")));
 				ps.setString(20, nullify(req.getParameter("phoneNumber")));
-				ps.setString(21, nullify(req.getParameter("cellNr")));
+				ps.setString(21, nullify(req.getParameter("cellNumber")));
 				ps.setString(22, nullify(req.getParameter("pagerNr")));
 				ps.setString(23, nullify(req.getParameter("pagerProvider")));
 				ps.setString(24, nullify(req.getParameter("alternatePhones")));
